@@ -6,6 +6,11 @@
 
 	void main()
 	{
+		OpenGL_Core::Log::Init();
+		OGLC_CORE_WARN("Initialized Log!");
+		int a = 5;
+		OGLC_INFO("Hello! Var={0}", a);
+
 		auto app = OpenGL_Core::CreateApplication();
 		app->Run();
 		delete app;
