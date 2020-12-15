@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="OpenGL_Core">
+      <UniqueIdentifier>{52E99362-BE9E-0C58-4793-062FB347035C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\OpenGL_Core.h" />
+    <ClInclude Include="src\OpenGL_Core\Application.h">
+      <Filter>OpenGL_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenGL_Core\Core.h">
+      <Filter>OpenGL_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenGL_Core\EntryPoint.h">
+      <Filter>OpenGL_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenGL_Core\Log.h">
+      <Filter>OpenGL_Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\OpenGL_Core\Application.cpp">
+      <Filter>OpenGL_Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGL_Core\Log.cpp">
+      <Filter>OpenGL_Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
