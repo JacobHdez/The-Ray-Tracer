@@ -9,3 +9,5 @@
 #else
 	#error OpenGl_Core only supports Windows!
 #endif // OGLC_PLATFORM_WINDOWS
+
+#define BIT(x) (1 << x) 
