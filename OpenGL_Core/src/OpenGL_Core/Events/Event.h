@@ -1,5 +1,6 @@
 #pragma once
 
+#include "oglcpch.h"
 #include "OpenGL_Core/Core.h"
 
 namespace OpenGL_Core {
