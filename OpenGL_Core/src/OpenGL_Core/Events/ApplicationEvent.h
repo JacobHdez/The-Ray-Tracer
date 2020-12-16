@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace OpenGL_Core {
 
 	class OPENGLC_API WindowResizeEvent : public Event

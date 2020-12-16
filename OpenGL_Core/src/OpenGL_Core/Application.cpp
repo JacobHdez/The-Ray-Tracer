@@ -1,3 +1,4 @@
+#include "oglcpch.h"
 #include "Application.h"
 
 #include "OpenGL_Core/Events/ApplicationEvent.h"

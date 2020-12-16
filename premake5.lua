@@ -18,6 +18,9 @@ project "OpenGL_Core"
 	targetdir ("bin/" ..outputdir.. "/%{prj.name}")
 	objdir ("bin-int/" ..outputdir.. "/%{prj.name}")
 
+	pchheader "oglcpch.h"
+	pchsource "OpenGL_Core/src/oglcpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",

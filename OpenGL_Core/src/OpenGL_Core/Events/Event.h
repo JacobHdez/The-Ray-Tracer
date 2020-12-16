@@ -2,9 +2,6 @@
 
 #include "OpenGL_Core/Core.h"
 
-#include <string>
-#include <functional>
-
 namespace OpenGL_Core {
 
 	enum class EventType
