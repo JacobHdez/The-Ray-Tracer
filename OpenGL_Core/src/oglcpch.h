@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "OpenGL_Core/Log.h"
+
 #ifdef OGLC_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif // OGLC_PLATFORM_WINDOWS

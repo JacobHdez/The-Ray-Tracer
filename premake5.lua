@@ -10,6 +10,12 @@ workspace "The-Ray-Tracer"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "OpenGL_Core/vendor/GLFW/include"
+
+include "OpenGL_Core/vendor/GLFW"
+
 project "OpenGL_Core"
 	location "OpenGL_Core"
 	kind "SharedLib"
@@ -30,7 +36,14 @@ project "OpenGL_Core"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
