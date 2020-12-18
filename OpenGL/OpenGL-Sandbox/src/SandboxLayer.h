@@ -2,6 +2,7 @@
 
 #include <GLCore.h>
 #include <GLCoreUtils.h>
+#include "MyCore/MyCore.h"
 
 class SandboxLayer : public GLCore::Layer
 {
@@ -15,4 +16,14 @@ public:
 	virtual void OnUpdate(GLCore::Timestep ts) override;
 	virtual void OnImGuiRender() override;
 private:
+	// ----- Test ----------
+	GLCore::Utils::Shader* m_Shader;
+	GLCore::Utils::PerspectiveCameraController m_CameraController;
+
+	unsigned int texture;
+	VertexArray va;
+	VertexBuffer vb;
+	VertexBufferLayout layout;
+	IndexBuffer ib;
+	// ---------------------
 };
