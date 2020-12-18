@@ -105,6 +105,9 @@ void SandboxLayer::OnDetach()
 
 void SandboxLayer::OnEvent(Event& event)
 {
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<WindowResizeEvent>(GLCORE_BIND_EVENT_FN(SandboxLayer::OnWindowResized));
+
 	m_CameraController.OnEvent(event);
 }
 
@@ -132,11 +135,24 @@ void SandboxLayer::OnImGuiRender()
 	if (ImGui::Button("Screenshot"))
 	{
 		LOG_INFO("Taking screenshot...");
-		unsigned char* pixels = new unsigned char[3 * 1280 * 720];
-		glReadPixels(0, 0, 1280, 720, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-		stbi_write_png("ss.png", 1280, 720, 3, pixels, 3 * 1280 * sizeof(unsigned char));
-		delete[] pixels;
+		SandboxLayer::TakeScreenShot();
 		LOG_INFO("Screenshot taken.");
 	}
 	ImGui::End();
+}
+
+bool SandboxLayer::OnWindowResized(GLCore::WindowResizeEvent& e)
+{
+	m_Width = (unsigned int)e.GetWidth();
+	m_Height = (unsigned int)e.GetHeight();
+	glViewport(0, 0, m_Width, m_Height);
+	return false;
+}
+
+void SandboxLayer::TakeScreenShot()
+{
+	unsigned char* pixels = new unsigned char[3 * m_Width * m_Height];
+	glReadPixels(0, 0, m_Width, m_Height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	stbi_write_png("outputs/screenshot.png", m_Width, m_Height, 3, pixels, 3 * m_Width * sizeof(unsigned char));
+	delete[] pixels;
 }
