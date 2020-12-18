@@ -22,16 +22,16 @@ void SandboxLayer::OnAttach()
 	glEnable(GL_DEPTH_TEST); // Habilidad el test de profundidad
 	glDepthFunc(GL_LESS); // Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
 	// -------------------------
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	//glEnable(GL_CULL_FACE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_Shader = Shader::FromGLSLTextFiles(
-		"assets/shaders/basic2.vert.glsl",
-		"assets/shaders/basic2.frag.glsl"
+		"assets/shaders/basic.lighting.vert.glsl",
+		"assets/shaders/basic.lighting.frag.glsl"
 	);
 
-	float positions[] = {
+	/*float positions[] = {
 		// Positions      // Colors         // TexCoords
 		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
@@ -41,10 +41,66 @@ void SandboxLayer::OnAttach()
 		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
+	};*/
+	float positions[] = {
+		// Positions          // Normals
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
 	unsigned int indices[] = {
-		0, 1, 2,
+		 0,  1,  2,
+		 3,  4,  5,
+		 6,  7,  8,
+		 9, 10, 11,
+		12, 13, 14,
+		15, 16, 17,
+		18, 19, 20,
+		21, 22, 23,
+		24, 25, 26,
+		27, 28, 29,
+		30, 31, 32,
+		33, 34, 35
+		/*0, 1, 2
 		1, 2, 3,
 		4, 5, 6,
 		5, 6, 7,
@@ -55,7 +111,7 @@ void SandboxLayer::OnAttach()
 		1, 3, 5,
 		3, 7, 5,
 		2, 3, 6,
-		3, 6, 7
+		3, 6, 7*/
 	};
 
 	/*// ----- Textures ----------
@@ -82,7 +138,7 @@ void SandboxLayer::OnAttach()
 	// -------------------------*/
 
 	va.Setup();
-	vb.Setup(positions, 8 * 6 * sizeof(float));
+	vb.Setup(positions, 36 * 6 * sizeof(float));
 	layout.Push<float>(3); // positions
 	layout.Push<float>(3); // colors
 	// layout.Push<float>(2); // texture coords
@@ -91,6 +147,16 @@ void SandboxLayer::OnAttach()
 	// ...
 
 	ib.Setup(indices, 12 * 3);
+
+	glUseProgram(m_Shader->GetRendererID());
+	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_lightColor");
+	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_lightPosition");
+	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetPosition()));
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_objectColor");
+	glUniform3f(location, 1.0f, 0.5f, 0.31f);
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 
 	va.Unbind();
 	vb.Unbind();
@@ -115,6 +181,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
+	// ----- Test ----------
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -122,11 +189,14 @@ void SandboxLayer::OnUpdate(Timestep ts)
 
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_cameraPosition");
+	glUniform3fv(location, 1, glm::value_ptr(m_CameraController.GetCamera().GetPosition()));
 
 	// glBindTexture(GL_TEXTURE_2D, texture);
 	va.Bind();
 	ib.Bind();
 	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	// ---------------------
 }
 
 void SandboxLayer::OnImGuiRender()
@@ -141,7 +211,7 @@ void SandboxLayer::OnImGuiRender()
 	ImGui::End();
 }
 
-bool SandboxLayer::OnWindowResized(GLCore::WindowResizeEvent& e)
+bool SandboxLayer::OnWindowResized(WindowResizeEvent& e)
 {
 	m_Width = (unsigned int)e.GetWidth();
 	m_Height = (unsigned int)e.GetHeight();

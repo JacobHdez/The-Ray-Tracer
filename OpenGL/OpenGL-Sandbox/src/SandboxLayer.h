@@ -20,17 +20,19 @@ private:
 
 	void TakeScreenShot();
 private:
-	// ----- Test ----------
 	GLCore::Utils::Shader* m_Shader;
 	GLCore::Utils::PerspectiveCameraController m_CameraController;
 
 	unsigned int m_Width = { 1280 };
 	unsigned int m_Height = { 720 };
 
-	unsigned int texture;
+	// ----- Test ----------
+	//unsigned int texture;
 	VertexArray va;
 	VertexBuffer vb;
 	VertexBufferLayout layout;
 	IndexBuffer ib;
+
+	Light m_Light;
 	// ---------------------
 };
