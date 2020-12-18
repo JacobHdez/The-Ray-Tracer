@@ -8,4 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
+
 #include "GLCore/Core/Application.h"
