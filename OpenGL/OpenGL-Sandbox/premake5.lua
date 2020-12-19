@@ -20,12 +20,20 @@ project "OpenGL-Sandbox"
 		"../OpenGL-Core/vendor",
 		"../OpenGL-Core/%{IncludeDir.glm}",
 		"../OpenGL-Core/%{IncludeDir.Glad}",
-		"../OpenGL-Core/%{IncludeDir.ImGui}"
+		"../OpenGL-Core/%{IncludeDir.ImGui}",
+		"../OpenGL-Core/%{IncludeDir.assimp}",
+		"src/MyCore"
+	}
+
+	libdirs
+	{
+		"../OpenGL-Core/vendor/assimp/lib"
 	}
 
 	links
 	{
-		"OpenGL-Core"
+		"OpenGL-Core",
+		"assimp-vc142-mtd.lib"
 	}
 
 	filter "system:windows"
