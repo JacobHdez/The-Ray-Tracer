@@ -15,17 +15,6 @@ void Primitive::Set(const char* name, const Vertex* vertices, const unsigned int
 	{
 		m_Indices.push_back(indices[i]);
 	}
-
-	for (auto& it : m_Vertices)
-	{
-		LOG_INFO(it.Position.x);
-		LOG_INFO(it.Position.y);
-		LOG_INFO(it.Position.z);
-		LOG_INFO(it.Normal.x);
-		LOG_INFO(it.Normal.y);
-		LOG_INFO(it.Normal.z);
-		LOG_INFO("----------");
-	}
 }
 
 Cube::Cube()
