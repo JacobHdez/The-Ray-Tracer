@@ -5,6 +5,7 @@ using namespace GLCore::Utils;
 
 SandboxLayer::SandboxLayer()
 	: m_CameraController(45.0f, 16.0f / 9.0f, 0.01f, 1000.f)
+	, m_Mesh(Cube())
 {
 }
 
@@ -28,94 +29,16 @@ void SandboxLayer::OnAttach()
 	glDepthFunc(GL_LESS); // Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
 	// -------------------------
 
-	float positions[] = {
-		// Positions          // Normals
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-	};
-
-	unsigned int indices[] = {
-		 0,  1,  2,
-		 3,  4,  5,
-		 6,  7,  8,
-		 9, 10, 11,
-		12, 13, 14,
-		15, 16, 17,
-		18, 19, 20,
-		21, 22, 23,
-		24, 25, 26,
-		27, 28, 29,
-		30, 31, 32,
-		33, 34, 35
-	};
-
-	va.Setup();
-	vb.Setup(positions, 36 * 6 * sizeof(float));
-	layout.Push<float>(3); // positions
-	layout.Push<float>(3); // normals
-	// layout.Push<float>(2); // texture coords
-	va.AddBuffer(vb, layout);
-
-	// ...
-
-	ib.Setup(indices, 12 * 3);
-
 	Material m_Material(glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
-
 
 	glUseProgram(m_Shader->GetRendererID());
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightPos");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetPosition()));
-	/*location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
-	glUniform3f(location, 1.0f, 0.5f, 0.31f);*/
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 	m_Material.SendToShader(m_Shader);
-
-	va.Unbind();
-	vb.Unbind();
-	ib.Unbind();
 	// ---------------------
 }
 
@@ -136,7 +59,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(m_Shader->GetRendererID());
@@ -147,10 +70,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glUniform3fv(location, 1, glm::value_ptr(m_CameraController.GetCamera().GetPosition()));
 
 	// ----- Test ----------
-	// glBindTexture(GL_TEXTURE_2D, texture);
-	va.Bind();
-	ib.Bind();
-	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	m_Mesh.Draw(m_Shader);
 	// ---------------------
 }
 

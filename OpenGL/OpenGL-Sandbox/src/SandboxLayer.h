@@ -27,11 +27,7 @@ private:
 	unsigned int m_Height = { 720 };
 
 	// ----- Test ----------
-	// unsigned int texture;
-	VertexArray va;
-	VertexBuffer vb;
-	VertexBufferLayout layout;
-	IndexBuffer ib;
+	Mesh m_Mesh;
 
 	Light m_Light;
 	// ---------------------

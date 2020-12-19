@@ -18,4 +18,5 @@
 #include "Material/Material.h"
 
 // Mesh
-//#include "Mesh/Mesh.h"
+#include "Mesh/Primitive/Primitive.h"
+#include "Mesh/Mesh.h"

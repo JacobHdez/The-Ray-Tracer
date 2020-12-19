@@ -9,6 +9,12 @@ Mesh::Mesh(std::string name, std::vector<Vertex> vertices, std::vector<unsigned 
 	Mesh::Setup();
 }
 
+Mesh::Mesh(const Primitive& primitive)
+	: m_Name(primitive.GetName()), m_Vertices(primitive.GetVertices()), m_Indices(primitive.GetIndices())
+{
+	Mesh::Setup();
+}
+
 Mesh::~Mesh()
 {
 }

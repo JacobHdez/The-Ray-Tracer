@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vertex.h"
+#include "Primitive/Primitive.h"
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/VertexBuffer.h"
@@ -10,6 +11,7 @@ class Mesh
 {
 public:
 	Mesh(std::string name, std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	Mesh(const Primitive& primitive);
 	~Mesh();
 
 	void Draw(const GLCore::Utils::Shader* shader);
