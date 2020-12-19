@@ -16,32 +16,18 @@ void SandboxLayer::OnAttach()
 {
 	EnableGLDebugging();
 
+	m_Shader = Shader::FromGLSLTextFiles(
+		"assets/shaders/shader.vert.glsl",
+		"assets/shaders/shader.frag.glsl"
+	);
+
 	// ----- Test ----------
 
 	// ----- Z-Buffer ----------
 	glEnable(GL_DEPTH_TEST); // Habilidad el test de profundidad
 	glDepthFunc(GL_LESS); // Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
 	// -------------------------
-	//glEnable(GL_BLEND);
-	//glEnable(GL_CULL_FACE);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	m_Shader = Shader::FromGLSLTextFiles(
-		"assets/shaders/basic.lighting.vert.glsl",
-		"assets/shaders/basic.lighting.frag.glsl"
-	);
-
-	/*float positions[] = {
-		// Positions      // Colors         // TexCoords
-		0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
-	};*/
 	float positions[] = {
 		// Positions          // Normals
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -100,47 +86,12 @@ void SandboxLayer::OnAttach()
 		27, 28, 29,
 		30, 31, 32,
 		33, 34, 35
-		/*0, 1, 2
-		1, 2, 3,
-		4, 5, 6,
-		5, 6, 7,
-		0, 1, 5,
-		4, 5, 0,
-		0, 2, 6,
-		0, 4, 6,
-		1, 3, 5,
-		3, 7, 5,
-		2, 3, 6,
-		3, 6, 7*/
 	};
-
-	/*// ----- Textures ----------
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load and generate the texture
-	int width, height, nrChannels;
-	unsigned char* data = stbi_load("assets/textures/container.jpg", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-	// -------------------------*/
 
 	va.Setup();
 	vb.Setup(positions, 36 * 6 * sizeof(float));
 	layout.Push<float>(3); // positions
-	layout.Push<float>(3); // colors
+	layout.Push<float>(3); // normals
 	// layout.Push<float>(2); // texture coords
 	va.AddBuffer(vb, layout);
 
@@ -148,15 +99,19 @@ void SandboxLayer::OnAttach()
 
 	ib.Setup(indices, 12 * 3);
 
+	Material m_Material(glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
+
+
 	glUseProgram(m_Shader->GetRendererID());
-	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_lightColor");
+	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_lightPosition");
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightPos");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetPosition()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_objectColor");
-	glUniform3f(location, 1.0f, 0.5f, 0.31f);
+	/*location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+	glUniform3f(location, 1.0f, 0.5f, 0.31f);*/
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+	m_Material.SendToShader(m_Shader);
 
 	va.Unbind();
 	vb.Unbind();
@@ -181,17 +136,17 @@ void SandboxLayer::OnUpdate(Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
-	// ----- Test ----------
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(m_Shader->GetRendererID());
 
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_cameraPosition");
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_CameraPos");
 	glUniform3fv(location, 1, glm::value_ptr(m_CameraController.GetCamera().GetPosition()));
 
+	// ----- Test ----------
 	// glBindTexture(GL_TEXTURE_2D, texture);
 	va.Bind();
 	ib.Bind();
@@ -202,12 +157,17 @@ void SandboxLayer::OnUpdate(Timestep ts)
 void SandboxLayer::OnImGuiRender()
 {
 	ImGui::Begin("Hierachy");
+	if (ImGui::TreeNode("Render"))
+	{
+		ImGui::TreePop();
+	}
 	if (ImGui::Button("Screenshot"))
 	{
 		LOG_INFO("Taking screenshot...");
 		SandboxLayer::TakeScreenShot();
 		LOG_INFO("Screenshot taken.");
 	}
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();
 }
 

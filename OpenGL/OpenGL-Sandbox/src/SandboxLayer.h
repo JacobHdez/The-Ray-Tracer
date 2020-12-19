@@ -2,7 +2,7 @@
 
 #include <GLCore.h>
 #include <GLCoreUtils.h>
-#include "MyCore/MyCore.h"
+#include "MyCore.h"
 
 class SandboxLayer : public GLCore::Layer
 {
@@ -20,14 +20,14 @@ private:
 
 	void TakeScreenShot();
 private:
-	GLCore::Utils::Shader* m_Shader;
 	GLCore::Utils::PerspectiveCameraController m_CameraController;
+	GLCore::Utils::Shader* m_Shader;
 
 	unsigned int m_Width = { 1280 };
 	unsigned int m_Height = { 720 };
 
 	// ----- Test ----------
-	//unsigned int texture;
+	// unsigned int texture;
 	VertexArray va;
 	VertexBuffer vb;
 	VertexBufferLayout layout;
