@@ -22,18 +22,21 @@ project "OpenGL-Sandbox"
 		"../OpenGL-Core/%{IncludeDir.Glad}",
 		"../OpenGL-Core/%{IncludeDir.ImGui}",
 		"src/MyCore",
-		"src/MyCore/vendor/assimp/include"
+		"src/MyCore/vendor/assimp/include",
+		"src/MyCore/vendor/lua/include"
 	}
 
 	libdirs
 	{
-		"src/MyCore/vendor/assimp/lib"
+		"src/MyCore/vendor/assimp/lib",
+		"src/MyCore/vendor/lua/lib"
 	}
 
 	links
 	{
 		"OpenGL-Core",
-		"assimp-vc142-mtd.lib"
+		"assimp-vc142-mtd.lib",
+		"Build_Lua_Project.lib"
 	}
 
 	filter "system:windows"

@@ -5,7 +5,7 @@ using namespace GLCore::Utils;
 
 SandboxLayer::SandboxLayer()
 	: m_CameraController(45.0f, 16.0f / 9.0f, 0.01f, 1000.f)
-	, m_Model("assets/objects/backpack/backpack.obj")
+	, m_Model("assets/objects/mountain/mountain_all.obj")
 {
 }
 
@@ -36,13 +36,9 @@ void SandboxLayer::OnAttach()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 	glUseProgram(m_Shader->GetRendererID());
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
-	//glUniform3f(location, 1.0f, 0.5f, 0.31f);
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 	// ---------------------
@@ -73,17 +69,16 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
 
-	// ----- Test ----------
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUniform3f(location, 0.25f, 0.25f, 0.25f);
 	m_Model.Draw(m_Shader);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
 	glUniform3f(location, 0.1f, 0.1f, 0.1f);
 	m_Model.Draw(m_Shader);
-	// ---------------------
 }
 
 void SandboxLayer::OnImGuiRender()
@@ -91,6 +86,16 @@ void SandboxLayer::OnImGuiRender()
 	ImGui::Begin("Hierachy");
 	if (ImGui::TreeNode("Render"))
 	{
+		//ImGui::InputText("Image Name", m_ImageFilename, 256);
+		ImGui::Text(m_ImageFilename.c_str());
+		ImGui::InputInt("Width", &m_ImageWidth);
+		ImGui::InputInt("Height", &m_ImageHeight);
+		if (ImGui::Button("Render"))
+		{
+			LOG_INFO("Starting to render!");
+			Render();
+			LOG_INFO("The rendering is over!");
+		}
 		ImGui::TreePop();
 	}
 	if (ImGui::Button("Screenshot"))
@@ -117,4 +122,44 @@ void SandboxLayer::TakeScreenShot()
 	glReadPixels(0, 0, m_Width, m_Height, GL_RGB, GL_UNSIGNED_BYTE, pixels);
 	stbi_write_png("outputs/screenshot.png", m_Width, m_Height, 3, pixels, 3 * m_Width * sizeof(unsigned char));
 	delete[] pixels;
+}
+
+void SandboxLayer::Render()
+{
+	float nPixels = (float)(m_ImageWidth * m_ImageHeight);
+	unsigned int count = 0;
+	std::string buff;
+
+	unsigned char* pixels = new unsigned char[3 * m_ImageWidth * m_ImageHeight];
+	for (unsigned int i = 0; i < m_ImageHeight; ++i)
+	{
+		for (unsigned int j = 0; j < m_ImageWidth; ++j)
+		{
+			if (count % 1000 == 0)
+			{
+				buff = Convert(count / nPixels * 100.0f) + "%";
+				LOG_INFO(buff.c_str());
+			}
+			count++;
+
+			pixels[0 + 3 * (j + m_ImageWidth * i)] = ((float)i / (float)m_ImageHeight) * 255;
+			pixels[1 + 3 * (j + m_ImageWidth * i)] = ((float)j / (float)m_ImageWidth) * 255;
+			pixels[2 + 3 * (j + m_ImageWidth * i)] = ((i < m_ImageHeight / 2.0f) && (j < m_ImageWidth / 2.0f) ||
+						                              (i >= m_ImageHeight / 2.0f) && (j >= m_ImageWidth / 2.0f)) ? 255 : 0;
+		}
+	}
+	std::string imagePath = "outputs/" + m_ImageFilename + ".png";
+	stbi_write_png(imagePath.c_str(), m_ImageWidth, m_ImageHeight, 3, pixels, 3 * m_ImageWidth * sizeof(unsigned char));
+
+	buff = Convert(count / nPixels * 100.0f) + "%";
+	LOG_INFO(buff.c_str());
+}
+
+std::string Convert(float number)
+{
+	std::ostringstream buff;
+	buff << std::fixed;
+	buff << std::setprecision(2);
+	buff << number;
+	return buff.str();
 }

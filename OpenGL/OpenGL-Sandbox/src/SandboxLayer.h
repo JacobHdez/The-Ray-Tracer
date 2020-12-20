@@ -19,6 +19,7 @@ private:
 	bool OnWindowResized(GLCore::WindowResizeEvent& e);
 
 	void TakeScreenShot();
+	void Render();
 private:
 	GLCore::Utils::PerspectiveCameraController m_CameraController;
 	GLCore::Utils::Shader* m_Shader;
@@ -31,4 +32,11 @@ private:
 
 	Light m_Light;
 	// ---------------------
+
+	// RayTracing
+	int m_ImageWidth = { 80 };
+	int m_ImageHeight = { 45 };
+	std::string m_ImageFilename = "SceneRT";
 };
+
+std::string Convert(float number);
