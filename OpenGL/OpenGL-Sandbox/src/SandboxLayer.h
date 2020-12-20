@@ -27,7 +27,7 @@ private:
 	unsigned int m_Height = { 720 };
 
 	// ----- Test ----------
-	Mesh m_Mesh;
+	Model m_Model;
 
 	Light m_Light;
 	// ---------------------

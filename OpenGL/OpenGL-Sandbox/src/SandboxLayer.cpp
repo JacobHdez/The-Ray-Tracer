@@ -5,7 +5,7 @@ using namespace GLCore::Utils;
 
 SandboxLayer::SandboxLayer()
 	: m_CameraController(45.0f, 16.0f / 9.0f, 0.01f, 1000.f)
-	, m_Mesh(Cube())
+	, m_Model("assets/objects/backpack/backpack.obj")
 {
 }
 
@@ -23,6 +23,7 @@ void SandboxLayer::OnAttach()
 	);
 
 	// ----- Test ----------
+	m_Model.Setup();
 
 	// ----- Z-Buffer ----------
 	glEnable(GL_DEPTH_TEST); // Habilidad el test de profundidad
@@ -35,14 +36,13 @@ void SandboxLayer::OnAttach()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glUseProgram(m_Shader->GetRendererID());
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
-	glUniform3f(location, 1.0f, 0.5f, 0.31f);
+	//glUniform3f(location, 1.0f, 0.5f, 0.31f);
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 	// ---------------------
@@ -74,7 +74,15 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
 
 	// ----- Test ----------
-	m_Mesh.Draw(m_Shader);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+	glUniform3f(location, 0.25f, 0.25f, 0.25f);
+	m_Model.Draw(m_Shader);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+	glUniform3f(location, 0.1f, 0.1f, 0.1f);
+	m_Model.Draw(m_Shader);
 	// ---------------------
 }
 

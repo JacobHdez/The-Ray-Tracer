@@ -7,13 +7,11 @@ class Primitive
 public:
 	virtual ~Primitive();
 
-	const std::string& GetName() const { return m_Name; }
 	const std::vector<Vertex>& GetVertices() const { return m_Vertices; }
 	const std::vector<unsigned int>& GetIndices() const { return m_Indices; }
 
-	void Set(const char* name, const Vertex* vertices, const unsigned int numVertices, const unsigned int* indices, const unsigned int numIndices);
+	void Set(const Vertex* vertices, const unsigned int numVertices, const unsigned int* indices, const unsigned int numIndices);
 private:
-	std::string m_Name;
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
 };

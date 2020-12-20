@@ -10,15 +10,14 @@
 class Mesh
 {
 public:
-	Mesh(std::string name, std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 	Mesh(const Primitive& primitive);
+	Mesh(const Mesh& mesh);
 	~Mesh();
 
+	void Setup();
 	void Draw(const GLCore::Utils::Shader* shader);
 private:
-	void Setup();
-private:
-	std::string m_Name;
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
 

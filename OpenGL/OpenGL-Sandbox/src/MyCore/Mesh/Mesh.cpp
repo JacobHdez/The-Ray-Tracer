@@ -3,29 +3,24 @@
 using namespace GLCore;
 using namespace GLCore::Utils;
 
-Mesh::Mesh(std::string name, std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-	: m_Name(name), m_Vertices(vertices), m_Indices(indices)
+Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices)
+	: m_Vertices(vertices), m_Indices(indices)
 {
-	Mesh::Setup();
 }
 
 Mesh::Mesh(const Primitive& primitive)
-	: m_Name(primitive.GetName()), m_Vertices(primitive.GetVertices()), m_Indices(primitive.GetIndices())
+	: m_Vertices(primitive.GetVertices()), m_Indices(primitive.GetIndices())
 {
-	Mesh::Setup();
+}
+
+Mesh::Mesh(const Mesh& mesh)
+{
+	m_Vertices = mesh.m_Vertices;
+	m_Indices = mesh.m_Indices;
 }
 
 Mesh::~Mesh()
 {
-}
-
-void Mesh::Draw(const Shader* shader)
-{
-	// glUseProgram(shader.GetRendererID());
-
-	m_va.Bind();
-	m_ib.Bind();
-	glDrawElements(GL_TRIANGLES, m_ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 void Mesh::Setup()
@@ -43,4 +38,13 @@ void Mesh::Setup()
 	m_vb.Unbind();
 	m_va.Unbind();
 	m_ib.Unbind();
+}
+
+void Mesh::Draw(const Shader* shader)
+{
+	// glUseProgram(shader.GetRendererID());
+
+	m_va.Bind();
+	m_ib.Bind();
+	glDrawElements(GL_TRIANGLES, m_ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }

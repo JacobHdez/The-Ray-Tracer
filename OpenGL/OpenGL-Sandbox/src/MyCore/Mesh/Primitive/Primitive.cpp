@@ -4,9 +4,8 @@ Primitive::~Primitive()
 {
 }
 
-void Primitive::Set(const char* name, const Vertex* vertices, const unsigned int numVertices, const unsigned int* indices, const unsigned int numIndices)
+void Primitive::Set(const Vertex* vertices, const unsigned int numVertices, const unsigned int* indices, const unsigned int numIndices)
 {
-	m_Name = name;
 	for (size_t i = 0; i < numVertices; ++i)
 	{
 		m_Vertices.push_back(vertices[i]);
@@ -48,7 +47,7 @@ Cube::Cube()
 	};
 	unsigned int numIndices = sizeof(indices) / sizeof(unsigned int);
 
-	Set("Cube", vertices, numVertices, indices, numIndices);
+	Set(vertices, numVertices, indices, numIndices);
 }
 
 Cube::~Cube()
