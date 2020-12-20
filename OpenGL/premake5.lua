@@ -23,7 +23,6 @@ IncludeDir["Glad"] = "vendor/Glad/include"
 IncludeDir["ImGui"] = "vendor/imgui"
 IncludeDir["glm"] = "vendor/glm"
 IncludeDir["stb"] = "vendor/stb"
-IncludeDir["assimp"] = "vendor/assimp/include"
 
 -- Projects
 group "Dependencies"
@@ -61,7 +60,6 @@ IncludeDir["Glad"] = "vendor/Glad/include"
 IncludeDir["ImGui"] = "vendor/imgui"
 IncludeDir["glm"] = "vendor/glm"
 IncludeDir["stb"] = "vendor/stb"
-IncludeDir["assimp"] = "vendor/assimp/include"
 
 -- Projects
 group "Dependencies"
