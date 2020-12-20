@@ -18,36 +18,33 @@ void SandboxLayer::OnAttach()
 	EnableGLDebugging();
 
 	m_Shader = Shader::FromGLSLTextFiles(
-		"assets/shaders/shader.vert.glsl",
-		"assets/shaders/shader.frag.glsl"
+		"assets/shaders/basic.vert.glsl",
+		"assets/shaders/basic.frag.glsl"
 	);
 
 	// ----- Test ----------
 
 	// ----- Z-Buffer ----------
 	glEnable(GL_DEPTH_TEST); // Habilidad el test de profundidad
-	//glDepthFunc(GL_LESS); // Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	glDepthFunc(GL_LESS); // Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
 
-	glEnable(GL_CULL_FACE);
+	/*glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CCW);*/
 	// -------------------------
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	Material m_Material(glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(1.0f, 0.5f, 0.31f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glUseProgram(m_Shader->GetRendererID());
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
 	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightPos");
-	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetPosition()));
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+	glUniform3f(location, 1.0f, 0.5f, 0.31f);
 	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-	m_Material.SendToShader(m_Shader);
 	// ---------------------
 }
 
@@ -75,8 +72,6 @@ void SandboxLayer::OnUpdate(Timestep ts)
 
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_CameraPos");
-	glUniform3fv(location, 1, glm::value_ptr(m_CameraController.GetCamera().GetPosition()));
 
 	// ----- Test ----------
 	m_Mesh.Draw(m_Shader);

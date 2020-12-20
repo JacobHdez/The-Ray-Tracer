@@ -35,7 +35,7 @@ void Mesh::Setup()
 	m_vb.Setup(&m_Vertices[0], m_Vertices.size() * sizeof(Vertex));
 
 	m_layout.Push<float>(3); // Position
-	m_layout.Push<float>(3); // Normal
+	// m_layout.Push<float>(3); // Normal
 	m_va.AddBuffer(m_vb, m_layout);
 
 	m_ib.Setup(&m_Indices[0], m_Indices.size());
