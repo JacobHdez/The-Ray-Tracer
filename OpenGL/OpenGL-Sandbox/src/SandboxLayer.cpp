@@ -4,7 +4,7 @@ using namespace GLCore;
 using namespace GLCore::Utils;
 
 SandboxLayer::SandboxLayer(const std::string& filepath)
-	: m_CameraController{ 45.0f, 16.0f / 9.0f, 0.01f, 1000.0f }, m_Shader{ nullptr }
+	: m_CameraController{ 45.0f, 16.0f / 9.0f, 0.01f, 1000.0f }, m_Shader{ nullptr }, m_Scene{ filepath }
 {
 }
 

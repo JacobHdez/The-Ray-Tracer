@@ -24,6 +24,8 @@ private:
 	GLCore::Utils::PerspectiveCameraController m_CameraController;
 	GLCore::Utils::Shader* m_Shader;
 
+	Scene m_Scene;
+
 	unsigned int m_Width = { 1280 };
 	unsigned int m_Height = { 720 };
 
