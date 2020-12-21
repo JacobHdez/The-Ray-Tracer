@@ -7,7 +7,7 @@
 class SandboxLayer : public GLCore::Layer
 {
 public:
-	SandboxLayer();
+	SandboxLayer(const std::string& filepath);
 	virtual ~SandboxLayer();
 
 	virtual void OnAttach() override;
@@ -27,16 +27,9 @@ private:
 	unsigned int m_Width = { 1280 };
 	unsigned int m_Height = { 720 };
 
-	// ----- Test ----------
-	Model m_Model;
-
-	Light m_Light;
-	// ---------------------
-
-	// RayTracing
+	std::string m_ImageFilename = "SceneRT";
 	int m_ImageWidth = { 80 };
 	int m_ImageHeight = { 45 };
-	std::string m_ImageFilename = "SceneRT";
 };
 
 std::string Convert(float number);

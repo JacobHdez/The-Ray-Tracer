@@ -3,9 +3,8 @@
 using namespace GLCore;
 using namespace GLCore::Utils;
 
-SandboxLayer::SandboxLayer()
-	: m_CameraController(45.0f, 16.0f / 9.0f, 0.01f, 1000.f)
-	, m_Model("assets/objects/mountain/mountain_all.obj")
+SandboxLayer::SandboxLayer(const std::string& filepath)
+	: m_CameraController{ 45.0f, 16.0f / 9.0f, 0.01f, 1000.0f }, m_Shader{ nullptr }
 {
 }
 
@@ -22,26 +21,15 @@ void SandboxLayer::OnAttach()
 		"assets/shaders/basic.frag.glsl"
 	);
 
-	// ----- Test ----------
-	m_Model.Setup();
-
-	// ----- Z-Buffer ----------
-	glEnable(GL_DEPTH_TEST); // Habilidad el test de profundidad
-	glDepthFunc(GL_LESS); // Aceptar el fragmento si está más cerca de la cámara que el fragmento anterior
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	/*glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);*/
-	// -------------------------
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glUseProgram(m_Shader->GetRendererID());
-	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
-	glUniform3fv(location, 1, glm::value_ptr(m_Light.GetColor()));
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_Model");
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
-	// ---------------------
 }
 
 void SandboxLayer::OnDetach()
@@ -61,7 +49,7 @@ void SandboxLayer::OnUpdate(Timestep ts)
 {
 	m_CameraController.OnUpdate(ts);
 
-	glClearColor(0.0f, 0.0f, 0.3f, 0.0f);
+	glClearColor(0.75f, 0.75f, 0.75f, 0.75f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(m_Shader->GetRendererID());
@@ -69,16 +57,13 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
 
-
-	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+	/*location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUniform3f(location, 0.25f, 0.25f, 0.25f);
-	m_Model.Draw(m_Shader);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glUniform3f(location, 0.1f, 0.1f, 0.1f);
-	m_Model.Draw(m_Shader);
+	glUniform3f(location, 0.1f, 0.1f, 0.1f);*/
 }
 
 void SandboxLayer::OnImGuiRender()
@@ -86,7 +71,6 @@ void SandboxLayer::OnImGuiRender()
 	ImGui::Begin("Hierachy");
 	if (ImGui::TreeNode("Render"))
 	{
-		//ImGui::InputText("Image Name", m_ImageFilename, 256);
 		ImGui::Text(m_ImageFilename.c_str());
 		ImGui::InputInt("Width", &m_ImageWidth);
 		ImGui::InputInt("Height", &m_ImageHeight);
@@ -142,6 +126,7 @@ void SandboxLayer::Render()
 			}
 			count++;
 
+			// Test img
 			pixels[0 + 3 * (j + m_ImageWidth * i)] = ((float)i / (float)m_ImageHeight) * 255;
 			pixels[1 + 3 * (j + m_ImageWidth * i)] = ((float)j / (float)m_ImageWidth) * 255;
 			pixels[2 + 3 * (j + m_ImageWidth * i)] = ((i < m_ImageHeight / 2.0f) && (j < m_ImageWidth / 2.0f) ||
@@ -150,6 +135,7 @@ void SandboxLayer::Render()
 	}
 	std::string imagePath = "outputs/" + m_ImageFilename + ".png";
 	stbi_write_png(imagePath.c_str(), m_ImageWidth, m_ImageHeight, 3, pixels, 3 * m_ImageWidth * sizeof(unsigned char));
+	delete[] pixels;
 
 	buff = Convert(count / nPixels * 100.0f) + "%";
 	LOG_INFO(buff.c_str());
