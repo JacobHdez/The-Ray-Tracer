@@ -1,7 +1,5 @@
 #include "Model.h"
 
-#include "MyCore.h"
-
 using namespace GLCore;
 using namespace GLCore::Utils;
 

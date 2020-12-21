@@ -2,12 +2,8 @@
 
 #include "boost/property_tree/ptree.hpp"
 #include "boost/property_tree/json_parser.hpp"
-namespace pt = boost::property_tree
 
 /*
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-
 // Short alias for this namespace
 namespace pt = boost::property_tree;
 
@@ -29,14 +25,13 @@ pt::read_json("filename.json", root);
 
 Scene::Scene(const std::string& filepath)
 {
-	Scene::LoadSceneScript();
+	Scene::LoadSceneScript(filepath);
 }
 
 Scene::~Scene()
 {
 }
 
-void Scene::LoadSceneScript()
+void Scene::LoadSceneScript(const std::string& filepath)
 {
-
 }

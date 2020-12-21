@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLCore.h>
-#include <GLCoreUtils.h>
 #include "Mesh/Mesh.h"
 
 // Assimp

@@ -29,6 +29,6 @@ public:
 	Scene(const std::string& filepath);
 	~Scene();
 
-	void LoadSceneScript();
+	void LoadSceneScript(const std::string& filepath);
 private:
 };

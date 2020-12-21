@@ -23,3 +23,5 @@ Para esta tarea se ocupo como codigo base [OpenGL-Core](https://github.com/TheCh
 - [Learn OpenGL](https://learnopengl.com)
 - [OpenGl - Tutorial](http://www.opengl-tutorial.org/es/)
 - [C++ OpenGL 3D Tutorial](https://www.youtube.com/playlist?list=PL6xSOsbVA1eYSZTKBxnoXYboy7wc4yg-Z)
+- [Embedding Lua in C++](https://www.youtube.com/watch?v=4l5HdmPoynw)
+- [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)

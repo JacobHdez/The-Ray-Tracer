@@ -23,7 +23,7 @@ project "OpenGL-Sandbox"
 		"../OpenGL-Core/%{IncludeDir.ImGui}",
 		"src/MyCore",
 		"src/MyCore/vendor/assimp/include",
-		"src/MyCore/vendor/boost/include"
+		"src/MyCore/vendor/boost_1_75_0"
 	}
 
 	libdirs
