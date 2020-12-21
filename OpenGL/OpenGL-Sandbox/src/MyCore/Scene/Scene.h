@@ -10,9 +10,6 @@ public:
 	SceneNode();
 	~SceneNode();
 
-	//void SetMesh();
-	//void SetMaterial();
-
 	void SetModelMatrix(const glm::mat4& model) { m_Model = model; }
 	const glm::mat4& GetModelMatrix() const { return m_Model; }
 private:
@@ -33,8 +30,10 @@ class Scene
 public:
 	Scene(float fovy, float aspect, float zNear, float zFar);
 	~Scene();
+
+	void SetProjection(float fovy, float aspect, float zNear, float zFar) { m_Camera.SetProjection(fovy, aspect, zNear, zFar); }
 private:
-	SceneNode m_Root;
+	SceneNode* m_Root;
 
 	GLCore::Utils::PerspectiveCamera m_Camera;
 	std::vector<Light> m_Lights;

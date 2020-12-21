@@ -10,7 +10,7 @@ SceneNode::~SceneNode()
 }
 
 Scene::Scene(float fovy, float aspect, float zNear, float zFar)
-	: m_Camera{ fovy, aspect, zNear, zFar }
+	: m_Root{ nullptr }, m_Camera{ fovy, aspect, zNear, zFar }
 {
 }
 
