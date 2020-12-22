@@ -79,12 +79,29 @@ glm::vec3 ray_color(Scene& scene, Ray& primRay, int depth)
 		return (1.0f - t) * glm::vec3(1.0f, 1.0f, 1.0f) + t * glm::vec3(0.1f, 0.3f, 0.4f);
 	}
 
-	/*if (hitObject != objects.end())
+	glm::vec3 hitColor;
+
+	Material material = hitObject->GetMaterial();
+	for (auto& it : scene.GetLights())
 	{
+		// Ambient
+		glm::vec3 ambient = it.GetColor() * material.GetAmbient();
 
-	}*/
+		// Difusse
+		glm::vec3 lightDir = glm::normalize(it.GetPosition() - hit.m_Point);
+		float diff = std::max(glm::dot(hit.m_Normal, lightDir), 0.0f);
+		glm::vec3 difusse = it.GetColor() * (diff * material.GetDiffuse());
 
-	return glm::vec3(1.0f);
+		// Specular
+		glm::vec3 cameraDir = glm::normalize(scene.GetCameraPosition() - hit.m_Point);
+		glm::vec3 reflectDir = glm::reflect(-lightDir, hit.m_Normal);
+		float spec = std::pow(std::max(glm::dot(cameraDir, reflectDir), 0.0f), material.GetShininess());
+		glm::vec3 specular = it.GetColor() * (spec * material.GetSpecular());
+
+		hitColor = ambient + difusse + specular;
+	}
+
+	return hitColor;
 }
 
 bool Intersect(SceneNode& node, Ray& ray, hit_record& hit)
@@ -103,12 +120,13 @@ bool Intersect(SceneNode& node, Ray& ray, hit_record& hit)
 
 		auto test = modelMatrix * glm::vec4(1.0f);
 
-		glm::vec3 normalF = node.GetNormal(i);
+		glm::vec3 normalF = glm::transpose(glm::inverse(modelMatrix)) * glm::vec4(node.GetNormal(i), 1.0f);
 
 		float t = FLT_MAX;
 		if (IntersectTriangle(vertices, normalF, ray, t) && t < tNear)
 		{
 			hit.m_Point = ray.at(t);
+			hit.m_Normal = glm::normalize(normalF);
 			hit.t = t;
 
 			tNear = t;
@@ -141,38 +159,32 @@ bool IntersectTriangle(std::vector<Vertex>& vertices, glm::vec3& normal, Ray& ra
 
 	return true;
 
-	/*// Check if ray and plane are parallel
-	float dotDir = glm::dot(normal, ray.GetDirection());
-	if (fabs(dotDir) < EPSILON) false;
+	/*float NdotRayDirection = glm::dot(normal, ray.GetDirection());
+	if (fabs(NdotRayDirection) < EPSILON)
+		return false;
 
-	// Compute d from the equation of a plane - ax + by + cz + d = 0, n = (a,b,c)
 	float d = glm::dot(normal, vertices[0].Position);
 
-	// Compute t
-	float dotOrigin = glm::dot(normal, ray.GetOrigin());
-	t = -(dotOrigin + d) / dotDir;
-	if (t < 0) false; // Triangle is behind ray
+	t = (glm::dot(normal, ray.GetOrigin()) + d) / NdotRayDirection;
+	if (t < 0) return false;
 
-	// Compute intersection point with plane
-	glm::vec3 hitPoint = ray.at(t);
+	glm::vec3 P = ray.at(t);
 
-	// Check if intersection point is inside triangle
 	glm::vec3 C;
 
-	glm::vec3 v01 = vertices[1].Position - vertices[0].Position;
-	glm::vec3 v12 = vertices[2].Position - vertices[1].Position;
-	glm::vec3 v20 = vertices[0].Position - vertices[2].Position;
-
-	glm::vec3 vp0 = hitPoint - vertices[0].Position;
-	C = glm::cross(v01, vp0);
+	glm::vec3 edge0 = vertices[1].Position - vertices[0].Position;
+	glm::vec3 vp0 = P - vertices[0].Position;
+	C = glm::cross(edge0, vp0);
 	if (glm::dot(normal, C) < 0.0f) return false;
 
-	glm::vec3 vp1 = hitPoint - vertices[1].Position;
-	C = glm::cross(v12, vp1);
+	glm::vec3 edge1 = vertices[2].Position - vertices[1].Position;
+	glm::vec3 vp1 = P - vertices[1].Position;
+	C = glm::cross(edge1, vp1);
 	if (glm::dot(normal, C) < 0.0f) return false;
 
-	glm::vec3 vp2 = hitPoint - vertices[2].Position;
-	C = glm::cross(v20, vp2);
+	glm::vec3 edge2 = vertices[0].Position - vertices[2].Position;
+	glm::vec3 vp2 = P - vertices[2].Position;
+	C = glm::cross(edge2, vp2);
 	if (glm::dot(normal, C) < 0.0f) return false;
 
 	return true;*/

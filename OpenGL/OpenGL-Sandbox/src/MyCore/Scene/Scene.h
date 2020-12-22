@@ -30,6 +30,7 @@ public:
 	std::vector<Vertex> GetFace(int nFace) { return m_Mesh.GetFace(nFace); }
 	glm::vec3 GetNormal(int nFace) { return m_Mesh.GetNormal(nFace); }
 	glm::mat4 GetModelMatrix() const { return m_ModelMatrix; }
+	Material GetMaterial() const { return m_Material; }
 private:
 	std::string m_Name;
 
@@ -51,6 +52,7 @@ public:
 	float GetAspect() const { return m_aspect; }
 	glm::vec3 GetCameraPosition() const { return m_Camera.GetPosition(); }
 	const std::list<SceneNode> GetNodes() const { return m_Nodes; }
+	const std::vector<Light> GetLights() const { return m_Lights; }
 private:
 	void LoadSceneScript(const std::string& filepath);
 private:

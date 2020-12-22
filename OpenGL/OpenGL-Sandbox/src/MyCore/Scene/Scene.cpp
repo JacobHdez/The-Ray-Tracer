@@ -107,6 +107,12 @@ void Scene::LoadSceneScript(const std::string& filepath)
 		LOG_INFO("[SCENE::MATERIAL] Loading material!");
 		std::string name = material.first.data();
 
+		std::vector<float> ambient;
+		for (pt::ptree::value_type& value : material.second.get_child("ambient"))
+		{
+			ambient.push_back(value.second.get_value<float>());
+		}
+
 		std::vector<float> diffuse;
 		for (pt::ptree::value_type& value : material.second.get_child("diffuse"))
 		{
@@ -121,7 +127,7 @@ void Scene::LoadSceneScript(const std::string& filepath)
 
 		float shininess = material.second.get<float>("shininess");
 
-		materials.insert(std::make_pair(name, Material(glm::vec3(diffuse[0], diffuse[1], diffuse[2]), glm::vec3(specular[0], specular[1], specular[2]), shininess)));
+		materials.insert(std::make_pair(name, Material(glm::vec3(ambient[0], ambient[1], ambient[2]), glm::vec3(diffuse[0], diffuse[1], diffuse[2]), glm::vec3(specular[0], specular[1], specular[2]), shininess)));
 	}
 
 	LOG_INFO("[SCENE] Loading objects!");
@@ -172,6 +178,19 @@ void Scene::LoadSceneScript(const std::string& filepath)
 				else
 				{
 					m_Nodes.push_back(SceneNode(name, Mesh(Cube()), it->second, modelMatrix));
+				}
+			}
+			else if (!buffer.compare("plane"))
+			{
+				auto it = materials.find(material);
+				if (it == materials.end())
+				{
+					material = "Material '" + material + "' not found.";
+					LOG_WARN(material.c_str());
+				}
+				else
+				{
+					m_Nodes.push_back(SceneNode(name, Mesh(Plane()), it->second, modelMatrix));
 				}
 			}
 			else

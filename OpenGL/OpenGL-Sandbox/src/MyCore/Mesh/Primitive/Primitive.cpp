@@ -16,6 +16,30 @@ void Primitive::Set(const Vertex* vertices, const unsigned int numVertices, cons
 	}
 }
 
+Plane::Plane()
+{
+	Vertex vertices[] = {
+	glm::vec3(-1.0f, 0.0f,  1.0f),
+	glm::vec3( 1.0f, 0.0f,  1.0f),
+	glm::vec3(-1.0f, 0.0f, -1.0f),
+	glm::vec3( 1.0f, 0.0f, -1.0f),
+	};
+	unsigned int numVertices = sizeof(vertices) / sizeof(Vertex);
+
+	unsigned int indices[] = {
+		1, 2, 0,
+		1, 3, 2
+	};
+	unsigned int numIndices = sizeof(indices) / sizeof(unsigned int);
+
+	Set(vertices, numVertices, indices, numIndices);
+}
+
+Plane::~Plane()
+{
+}
+
+
 Cube::Cube()
 	: Primitive()
 {

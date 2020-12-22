@@ -16,6 +16,13 @@ private:
 	std::vector<unsigned int> m_Indices;
 };
 
+class Plane : public Primitive
+{
+public:
+	Plane();
+	virtual ~Plane();
+};
+
 class Cube : public Primitive
 {
 public:
