@@ -9,7 +9,7 @@ public:
 
 	const std::vector<Vertex>& GetVertices() const { return m_Vertices; }
 	const std::vector<unsigned int>& GetIndices() const { return m_Indices; }
-
+protected:
 	void Set(const Vertex* vertices, const unsigned int numVertices, const unsigned int* indices, const unsigned int numIndices);
 private:
 	std::vector<Vertex> m_Vertices;

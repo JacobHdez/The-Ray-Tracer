@@ -19,3 +19,19 @@ Light::Light(const Light& light)
 Light::~Light()
 {
 }
+
+void Light::Set(const glm::vec3& color, const glm::vec3& position)
+{
+	m_Color = color;
+	m_Position = position;
+}
+
+PointLight::PointLight(const glm::vec3& color, const glm::vec3& position, float constant, float linear, float quadratic)
+	: m_Constant{ constant }, m_Linear{ linear }, m_Quadratic{ quadratic }
+{
+	PointLight::Set(color, position);
+}
+
+PointLight::~PointLight()
+{
+}

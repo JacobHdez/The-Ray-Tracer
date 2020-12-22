@@ -10,10 +10,11 @@ using namespace GLCore::Utils;
 SceneNode::SceneNode(const std::string& name, const Mesh& mesh, const Material& material, const glm::mat4& modelMatrix)
 	: m_Name(name), m_Mesh(mesh), m_Material(material), m_ModelMatrix(modelMatrix)
 {
+	m_invModelMatrix = glm::inverse(m_ModelMatrix);
 }
 
 SceneNode::SceneNode(const SceneNode& node)
-	: m_Name(node.m_Name), m_Mesh(node.m_Mesh), m_Material(node.m_Material), m_ModelMatrix(node.m_ModelMatrix)
+	: m_Name(node.m_Name), m_Mesh(node.m_Mesh), m_Material(node.m_Material), m_ModelMatrix(node.m_ModelMatrix), m_invModelMatrix(node.m_invModelMatrix)
 {
 }
 
@@ -97,7 +98,11 @@ void Scene::LoadSceneScript(const std::string& filepath)
 			position.push_back(value.second.get_value<float>());
 		}
 
-		m_Lights.push_back(Light(glm::vec3(color[0], color[1], color[2]), glm::vec3(position[0], position[1], position[2])));
+		float constant = light.second.get<float>("constant");
+		float linear = light.second.get<float>("linear");
+		float quadratic = light.second.get<float>("quadratic");
+
+		m_Lights.push_back(PointLight(glm::vec3(color[0], color[1], color[2]), glm::vec3(position[0], position[1], position[2]), constant, linear, quadratic));
 	}
 
 	LOG_INFO("[SCENE] Loading materials!");

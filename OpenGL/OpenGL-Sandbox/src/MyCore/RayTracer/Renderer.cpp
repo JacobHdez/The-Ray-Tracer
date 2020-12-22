@@ -98,6 +98,13 @@ glm::vec3 ray_color(Scene& scene, Ray& primRay, int depth)
 		float spec = std::pow(std::max(glm::dot(cameraDir, reflectDir), 0.0f), material.GetShininess());
 		glm::vec3 specular = it.GetColor() * (spec * material.GetSpecular());
 
+		float distance = glm::length(it.GetPosition() - hit.m_Point);
+		float attenuation = 1.0f / (it.GetConstant() + it.GetLinear() * distance + it.GetQuadratic() * (distance * distance));
+
+		ambient *= attenuation;
+		difusse *= attenuation;
+		specular *= attenuation;
+
 		hitColor = ambient + difusse + specular;
 	}
 
@@ -110,6 +117,7 @@ bool Intersect(SceneNode& node, Ray& ray, hit_record& hit)
 	float tNear = FLT_MAX;
 
 	glm::mat4 modelMatrix = node.GetModelMatrix();
+	glm::mat4 invModelMatrix = node.GetInvModelMatrix();
 
 	for (int i = 0; i < node.GetNumFaces(); ++i)
 	{
@@ -120,7 +128,7 @@ bool Intersect(SceneNode& node, Ray& ray, hit_record& hit)
 
 		auto test = modelMatrix * glm::vec4(1.0f);
 
-		glm::vec3 normalF = glm::transpose(glm::inverse(modelMatrix)) * glm::vec4(node.GetNormal(i), 1.0f);
+		glm::vec3 normalF = glm::transpose(invModelMatrix) * glm::vec4(node.GetNormal(i), 1.0f);
 
 		float t = FLT_MAX;
 		if (IntersectTriangle(vertices, normalF, ray, t) && t < tNear)

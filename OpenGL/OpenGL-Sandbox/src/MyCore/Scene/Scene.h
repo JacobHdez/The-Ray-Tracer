@@ -30,6 +30,7 @@ public:
 	std::vector<Vertex> GetFace(int nFace) { return m_Mesh.GetFace(nFace); }
 	glm::vec3 GetNormal(int nFace) { return m_Mesh.GetNormal(nFace); }
 	glm::mat4 GetModelMatrix() const { return m_ModelMatrix; }
+	glm::mat4 GetInvModelMatrix() const { return m_invModelMatrix; }
 	Material GetMaterial() const { return m_Material; }
 private:
 	std::string m_Name;
@@ -38,6 +39,7 @@ private:
 	Material m_Material;
 
 	glm::mat4 m_ModelMatrix;
+	glm::mat4 m_invModelMatrix;
 };
 
 class Scene
@@ -52,14 +54,14 @@ public:
 	float GetAspect() const { return m_aspect; }
 	glm::vec3 GetCameraPosition() const { return m_Camera.GetPosition(); }
 	const std::list<SceneNode> GetNodes() const { return m_Nodes; }
-	const std::vector<Light> GetLights() const { return m_Lights; }
+	const std::vector<PointLight> GetLights() const { return m_Lights; }
 private:
 	void LoadSceneScript(const std::string& filepath);
 private:
 	GLCore::Utils::PerspectiveCamera m_Camera;
 	float m_fovy, m_aspect, m_zNear, m_zFar;
 
-	std::vector<Light> m_Lights;
+	std::vector<PointLight> m_Lights;
 
 	//SceneNode* m_Root;
 	std::list<SceneNode> m_Nodes;
