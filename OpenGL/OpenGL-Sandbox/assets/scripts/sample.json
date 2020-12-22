@@ -9,14 +9,14 @@
     "light_sources": {
         "white_light_1": {
             "color": [ 0.99, 0.99, 0.75 ],
-            "position": [ 4.0, 1.0, 0.0 ],
+            "position": [ 4.0, 5.0, -2.0 ],
             "constant": 1.0,
             "linear": 0.14,
             "quadratic": 0.07
         },
         "white_light_2": {
             "color": [ 0.75, 0.99, 0.99 ],
-            "position": [ -4.0, 1.0, 0.0 ],
+            "position": [ -4.0, 4.0, 2.0 ],
             "constant": 1.0,
             "linear": 0.22,
             "quadratic": 0.20
@@ -35,6 +35,18 @@
             "diffuse": [ 0.0, 1.0, 0.991435 ],
             "specular": [ 0.5, 0.5, 0.5 ],
             "shininess": 225
+        },
+        "pearl": {
+            "ambient": [ 0.25, 0.20725, 0.20725 ],
+            "diffuse": [ 1.0, 0.829, 0.829 ],
+            "specular": [ 0.296648, 0.296648, 0.296648 ],
+            "shininess": 11.264
+        },
+        "obsidian": {
+            "ambient": [ 0.05375, 0.05, 0.06625 ],
+            "diffuse": [ 0.18275, 0.17, 0.22525 ],
+            "specular": [ 0.332741, 0.328634, 0.346435 ],
+            "shininess": 38.4
         }
     },
 
@@ -47,11 +59,35 @@
             "primitive": 1,
             "type": "plane"
         },
-        "cube": {
+        "cube1": {
             "position": [ 0.0, 0.0, 0.0 ],
             "rotation": [ 0.0, 0.0, 0.0 ],
             "scale": [ 1.0, 2.0, 1.0 ],
+            "material": "pearl",
+            "primitive": 1,
+            "type": "cube"
+        },
+        "cube2": {
+            "position": [ -2.0, -1.0, 0.0 ],
+            "rotation": [ 0.0, 0.0, 0.0 ],
+            "scale": [ 0.5, 1.0, 2.0 ],
             "material": "cris",
+            "primitive": 1,
+            "type": "cube"
+        },
+        "cube3": {
+            "position": [ 2.0, -1.0, -2.0 ],
+            "rotation": [ 1.58, 0.0, 0.0 ],
+            "scale": [ 0.5, 0.25, 1.0 ],
+            "material": "obsidian",
+            "primitive": 1,
+            "type": "cube"
+        },
+        "cube4": {
+            "position": [ 2.0, -1.75, 2.0 ],
+            "rotation": [ 1.58, 0.0, 0.0 ],
+            "scale": [ 0.25, 0.25, 0.25 ],
+            "material": "pearl",
             "primitive": 1,
             "type": "cube"
         }

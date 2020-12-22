@@ -71,7 +71,6 @@ glm::vec3 ray_color(Scene& scene, Ray& primRay, int depth)
 			hitColor += is_shadow ?
 				CalcPointLight(it, material, hit.m_Normal, hit.m_Point, cameraDir) * 0.3f :
 				CalcPointLight(it, material, hit.m_Normal, hit.m_Point, cameraDir);
-			//hitColor += CalcPointLight(it, material, hit.m_Normal, hit.m_Point, cameraDir);
 		}
 	}
 	else // Background
