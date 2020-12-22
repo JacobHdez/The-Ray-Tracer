@@ -7,6 +7,7 @@ class Material
 {
 public:
 	Material(glm::vec3 diffuse, glm::vec3 specular, float shininess);
+	Material(const Material& material);
 	~Material();
 
 	void SendToShader(GLCore::Utils::Shader* shader);

@@ -30,6 +30,8 @@ void SandboxLayer::OnAttach()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	m_Scene.Setup();
 }
 
 void SandboxLayer::OnDetach()
@@ -57,13 +59,18 @@ void SandboxLayer::OnUpdate(Timestep ts)
 	int location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ViewProjection");
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m_CameraController.GetCamera().GetViewProjectionMatrix()));
 
-	/*location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_LightColor");
+	glUniform3f(location, 1.0f, 1.0f, 1.0f);
+	
+	location = glGetUniformLocation(m_Shader->GetRendererID(), "u_ObjectColor");
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glUniform3f(location, 0.25f, 0.25f, 0.25f);
+	m_Scene.Draw(m_Shader);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glUniform3f(location, 0.1f, 0.1f, 0.1f);*/
+	glUniform3f(location, 0.1f, 0.1f, 0.1f);
+	m_Scene.Draw(m_Shader);
 }
 
 void SandboxLayer::OnImGuiRender()
@@ -77,7 +84,8 @@ void SandboxLayer::OnImGuiRender()
 		if (ImGui::Button("Render"))
 		{
 			LOG_INFO("Starting to render!");
-			Render();
+			//Render();
+			RTRender(m_Scene, m_ImageWidth, m_ImageHeight, m_ImageFilename);
 			LOG_INFO("The rendering is over!");
 		}
 		ImGui::TreePop();
@@ -139,13 +147,4 @@ void SandboxLayer::Render()
 
 	buff = Convert(count / nPixels * 100.0f) + "%";
 	LOG_INFO(buff.c_str());
-}
-
-std::string Convert(float number)
-{
-	std::ostringstream buff;
-	buff << std::fixed;
-	buff << std::setprecision(2);
-	buff << number;
-	return buff.str();
 }

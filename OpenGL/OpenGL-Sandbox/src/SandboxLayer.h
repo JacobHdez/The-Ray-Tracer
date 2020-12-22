@@ -33,5 +33,3 @@ private:
 	int m_ImageWidth = { 80 };
 	int m_ImageHeight = { 45 };
 };
-
-std::string Convert(float number);

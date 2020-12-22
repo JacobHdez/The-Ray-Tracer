@@ -5,6 +5,17 @@ Light::Light()
 {
 }
 
+Light::Light(const glm::vec3& color, const glm::vec3& position)
+	: m_Color(color), m_Position(position)
+{
+}
+
+Light::Light(const Light& light)
+{
+	m_Color = light.m_Color;
+	m_Position = light.m_Position;
+}
+
 Light::~Light()
 {
 }

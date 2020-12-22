@@ -8,6 +8,13 @@ Material::Material(glm::vec3 diffuse, glm::vec3 specular, float shininess)
 {
 }
 
+Material::Material(const Material& material)
+{
+	m_Diffuse = material.m_Diffuse;
+	m_Specular = material.m_Specular;
+	m_Shininess = material.m_Shininess;
+}
+
 Material::~Material()
 {
 }

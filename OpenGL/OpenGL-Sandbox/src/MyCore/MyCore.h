@@ -21,3 +21,6 @@
 
 // Scene
 #include "Scene/Scene.h"
+
+// RayTracing
+#include "RayTracer/Renderer.h"

@@ -12,7 +12,7 @@ Para esta tarea se ocupo como codigo base [OpenGL-Core](https://github.com/TheCh
 5. [ ] El modelo de iluminaión de difusión y especular (Phong) funciona correctamente.
 6. [ ] Las sombras funcionan correctamente.
 7. [ ] Se proporciona un script que define y dibuja (render) una escena original.
-8. [ ] Las esferas y los cubos se pueden transformar con transformaciones afines.
+8. [x] Las esferas y los cubos se pueden transformar con transformaciones afines.
 9. [ ] Las transformaciones jerárquicas funcionan correctamente.
 10. [ ] Los volúmenes englobantes (esferas o cajas) se han implementado para objetos poligonales como se muestra en las imágenes con rendering especial.
 

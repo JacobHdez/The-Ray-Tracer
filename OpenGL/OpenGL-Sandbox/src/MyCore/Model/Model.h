@@ -13,7 +13,7 @@ public:
 	Model(const std::string& path);
 
 	void Setup();
-	void Draw(const GLCore::Utils::Shader* shader);
+	void Draw(GLCore::Utils::Shader* shader);
 private:
 	void loadModel(const std::string& path);
 	void processNode(aiNode* node, const aiScene* scene);

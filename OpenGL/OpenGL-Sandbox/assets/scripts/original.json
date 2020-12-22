@@ -10,6 +10,10 @@
         "white_light": {
             "color": [ 1.0, 1.0, 1.0 ],
             "position": [ 1.0, 2.0, 1.0 ]
+        },
+        "orange_light": {
+            "color": [ 1.0, 0.6, 0.0 ],
+            "position": [ -1.0, 2.0, 1.0 ]
         }
     },
 
@@ -23,12 +27,20 @@
 
     "objects": {
         "cube_01": {
-            "position": [ 0, 0, 0 ],
-            "rotation": [ 0.25, 0.25, 0.25 ],
-            "scale": [ 1, 1, 1 ],
+            "position": [ 0, -1, -1 ],
+            "rotation": [ 0.5, 0, 0 ],
+            "scale": [ 0.5, 0.5, 0.5 ],
             "material": "stone",
             "primitive": 1,
             "type": "cube"
+        },
+        "mountain": {
+            "position": [ 0, 0, 0 ],
+            "rotation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ],
+            "material": "stone",
+            "primitive": 0,
+            "filepath": "assets/objects/mountain/mountain.obj"
         }
     }
 }

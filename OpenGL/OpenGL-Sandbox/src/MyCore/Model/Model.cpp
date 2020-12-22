@@ -16,11 +16,11 @@ void Model::Setup()
 	}
 }
 
-void Model::Draw(const Shader* shader)
+void Model::Draw(Shader* shader)
 {
 	for (auto& it : m_Meshes)
 	{
-		it.Draw(shader);
+		it.Draw();
 	}
 }
 

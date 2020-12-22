@@ -13,6 +13,11 @@ Mesh::Mesh(const Primitive& primitive)
 {
 }
 
+Mesh::Mesh(const std::string& filepath)
+{
+	loadMesh(filepath);
+}
+
 Mesh::Mesh(const Mesh& mesh)
 {
 	m_Vertices = mesh.m_Vertices;
@@ -21,6 +26,30 @@ Mesh::Mesh(const Mesh& mesh)
 
 Mesh::~Mesh()
 {
+}
+
+void Mesh::Setup()
+{
+	m_va.Setup();
+
+	m_vb.Setup(&m_Vertices[0], m_Vertices.size() * sizeof(Vertex));
+
+	m_layout.Push<float>(3); // Position
+	// m_layout.Push<float>(3); // Normal
+	m_va.AddBuffer(m_vb, m_layout);
+
+	m_ib.Setup(&m_Indices[0], m_Indices.size());
+
+	m_vb.Unbind();
+	m_va.Unbind();
+	m_ib.Unbind();
+}
+
+void Mesh::Draw()
+{
+	m_va.Bind();
+	m_ib.Bind();
+	glDrawElements(GL_TRIANGLES, m_ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 void Mesh::loadMesh(const std::string& path)
@@ -72,30 +101,4 @@ void Mesh::processMesh(aiMesh* mesh, const aiScene* scene)
 		for (unsigned int j = 0; j < face.mNumIndices; ++j)
 			m_Indices.push_back(face.mIndices[j]);
 	}
-}
-
-void Mesh::Setup()
-{
-	m_va.Setup();
-
-	m_vb.Setup(&m_Vertices[0], m_Vertices.size() * sizeof(Vertex));
-
-	m_layout.Push<float>(3); // Position
-	// m_layout.Push<float>(3); // Normal
-	m_va.AddBuffer(m_vb, m_layout);
-
-	m_ib.Setup(&m_Indices[0], m_Indices.size());
-
-	m_vb.Unbind();
-	m_va.Unbind();
-	m_ib.Unbind();
-}
-
-void Mesh::Draw(const Shader* shader)
-{
-	// glUseProgram(shader.GetRendererID());
-
-	m_va.Bind();
-	m_ib.Bind();
-	glDrawElements(GL_TRIANGLES, m_ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
