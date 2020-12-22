@@ -25,6 +25,11 @@ public:
 
 	void Setup();
 	void Draw(GLCore::Utils::Shader* shader);
+
+	int GetNumFaces() const { return m_Mesh.GetNumFaces(); }
+	std::vector<Vertex> GetFace(int nFace) { return m_Mesh.GetFace(nFace); }
+	glm::vec3 GetNormal(int nFace) { return m_Mesh.GetNormal(nFace); }
+	glm::mat4 GetModelMatrix() const { return m_ModelMatrix; }
 private:
 	std::string m_Name;
 
@@ -44,6 +49,8 @@ public:
 	void Draw(GLCore::Utils::Shader* shader);
 
 	float GetAspect() const { return m_aspect; }
+	glm::vec3 GetCameraPosition() const { return m_Camera.GetPosition(); }
+	const std::list<SceneNode> GetNodes() const { return m_Nodes; }
 private:
 	void LoadSceneScript(const std::string& filepath);
 private:

@@ -52,6 +52,25 @@ void Mesh::Draw()
 	glDrawElements(GL_TRIANGLES, m_ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
+std::vector<Vertex> Mesh::GetFace(int nFace)
+{
+	int pos = nFace * 3;
+	std::vector<Vertex> vertices;
+	vertices.push_back(m_Vertices[m_Indices[pos]]);
+	vertices.push_back(m_Vertices[m_Indices[pos + 1]]);
+	vertices.push_back(m_Vertices[m_Indices[pos + 2]]);
+	return vertices;
+}
+
+glm::vec3 Mesh::GetNormal(int nFace)
+{
+	int pos = nFace * 3;
+	glm::vec3 v1 = m_Vertices[m_Indices[pos + 1]].Position - m_Vertices[m_Indices[pos]].Position;
+	glm::vec3 v2 = m_Vertices[m_Indices[pos + 2]].Position - m_Vertices[m_Indices[pos]].Position;
+	glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+	return normal;
+}
+
 void Mesh::loadMesh(const std::string& path)
 {
 	LOG_INFO("Loading mesh - Assimp");

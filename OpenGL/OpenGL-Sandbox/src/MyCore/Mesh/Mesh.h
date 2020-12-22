@@ -23,6 +23,10 @@ public:
 
 	void Setup();
 	void Draw();
+
+	int GetNumFaces() const { return (int)(m_Indices.size() / 3.0f); }
+	std::vector<Vertex> GetFace(int nFace);
+	glm::vec3 GetNormal(int nFace);
 private:
 	void loadMesh(const std::string& path);
 	void processNode(aiNode* node, const aiScene* scene);

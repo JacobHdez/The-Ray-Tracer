@@ -19,3 +19,9 @@ private:
 	glm::vec3 m_Origin;
 	glm::vec3 m_Direction;
 };
+
+struct hit_record {
+	glm::vec3 m_Point;
+	glm::vec3 m_Normal;
+	float t;
+};
