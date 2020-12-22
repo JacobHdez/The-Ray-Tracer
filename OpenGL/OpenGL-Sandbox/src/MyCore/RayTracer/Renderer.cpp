@@ -51,64 +51,62 @@ void RTRender(Scene& scene, unsigned int width, unsigned int height, std::string
 
 glm::vec3 ray_color(Scene& scene, Ray& primRay, int depth)
 {
+	glm::vec3 hitColor(0.0f);
+
 	hit_record hit;
+	std::list<SceneNode> nodes = scene.GetNodes();
+	std::list<SceneNode>::iterator hitNode, shadowHitNode;
+
+	if (Trace(nodes, primRay, hit, hitNode))
+	{
+		Material material = hitNode->GetMaterial();
+		for (auto& it : scene.GetLights())
+		{
+			Ray shadowRay(hit.m_Point + hit.m_Normal * 0.5f, it.GetPosition() - hit.m_Point);
+			hit_record shadowHit;
+
+			bool is_shadow = Trace(nodes, shadowRay, shadowHit, shadowHitNode);
+
+			glm::vec3 cameraDir = glm::normalize(scene.GetCameraPosition() - hit.m_Point);
+			hitColor += is_shadow ?
+				CalcPointLight(it, material, hit.m_Normal, hit.m_Point, cameraDir) * 0.3f :
+				CalcPointLight(it, material, hit.m_Normal, hit.m_Point, cameraDir);
+			//hitColor += CalcPointLight(it, material, hit.m_Normal, hit.m_Point, cameraDir);
+		}
+	}
+	else // Background
+	{
+		glm::vec3 uDir = glm::normalize(primRay.GetDirection());
+		float t = 0.5f * (uDir.y + 1.0f);
+		hitColor = (1.0f - t) * glm::vec3(1.0f, 1.0f, 1.0f) + t * glm::vec3(0.1f, 0.3f, 0.4f);
+	}
+
+	/*hitColor.r = hitColor.r > 1.0 ? 1.0 : hitColor.r;
+	hitColor.g = hitColor.g > 1.0 ? 1.0 : hitColor.g;
+	hitColor.b = hitColor.b > 1.0 ? 1.0 : hitColor.b;*/
+
+	return hitColor;
+}
+
+bool Trace(std::list<SceneNode>& nodes, Ray& ray, hit_record& hit, std::list<SceneNode>::iterator& hitNode)
+{
+	bool hitMesh = false;
 	float minDist = FLT_MAX; // std::numeric_limits<float>::max();
 
-	bool hitMesh = false;
-	std::list<SceneNode> objects = scene.GetNodes();
-	auto hitObject = objects.begin();
-
-	// for (auto& it : objects)
-	for (auto it = objects.begin(); it != objects.end(); ++it)
+	for (auto it = nodes.begin(); it != nodes.end(); ++it)
 	{
-		if (Intersect(*it, primRay, hit))
+		if (Intersect(*it, ray, hit))
 		{
-			float distance = glm::distance(scene.GetCameraPosition(), hit.m_Point);
+			float distance = glm::distance(ray.GetOrigin(), hit.m_Point);
 			if (distance < minDist)
 			{
 				hitMesh = true;
-				hitObject = it;
+				hitNode = it;
 			}
 		}
 	}
 
-	if (!hitMesh) // Background
-	{
-		glm::vec3 uDir = glm::normalize(primRay.GetDirection());
-		float t = 0.5f * (uDir.y + 1.0f);
-		return (1.0f - t) * glm::vec3(1.0f, 1.0f, 1.0f) + t * glm::vec3(0.1f, 0.3f, 0.4f);
-	}
-
-	glm::vec3 hitColor;
-
-	Material material = hitObject->GetMaterial();
-	for (auto& it : scene.GetLights())
-	{
-		// Ambient
-		glm::vec3 ambient = it.GetColor() * material.GetAmbient();
-
-		// Difusse
-		glm::vec3 lightDir = glm::normalize(it.GetPosition() - hit.m_Point);
-		float diff = std::max(glm::dot(hit.m_Normal, lightDir), 0.0f);
-		glm::vec3 difusse = it.GetColor() * (diff * material.GetDiffuse());
-
-		// Specular
-		glm::vec3 cameraDir = glm::normalize(scene.GetCameraPosition() - hit.m_Point);
-		glm::vec3 reflectDir = glm::reflect(-lightDir, hit.m_Normal);
-		float spec = std::pow(std::max(glm::dot(cameraDir, reflectDir), 0.0f), material.GetShininess());
-		glm::vec3 specular = it.GetColor() * (spec * material.GetSpecular());
-
-		float distance = glm::length(it.GetPosition() - hit.m_Point);
-		float attenuation = 1.0f / (it.GetConstant() + it.GetLinear() * distance + it.GetQuadratic() * (distance * distance));
-
-		ambient *= attenuation;
-		difusse *= attenuation;
-		specular *= attenuation;
-
-		hitColor = ambient + difusse + specular;
-	}
-
-	return hitColor;
+	return hitMesh;
 }
 
 bool Intersect(SceneNode& node, Ray& ray, hit_record& hit)
@@ -196,6 +194,27 @@ bool IntersectTriangle(std::vector<Vertex>& vertices, glm::vec3& normal, Ray& ra
 	if (glm::dot(normal, C) < 0.0f) return false;
 
 	return true;*/
+}
+
+glm::vec3 CalcPointLight(const PointLight& light, Material& material, glm::vec3& normal, glm::vec3& hitPos, glm::vec3& cameraDir)
+{
+	glm::vec3 lightDir = glm::normalize(light.GetPosition() - hitPos);
+	// diffuse shading
+	float diff = std::max(glm::dot(normal, lightDir), 0.0f);
+	// specular shading
+	glm::vec3 reflectDir = glm::reflect(-lightDir, normal);
+	float spec = std::pow(std::max(glm::dot(cameraDir, reflectDir), 0.0f), material.GetShininess());
+	// attenuation
+	float distance = glm::length(light.GetPosition() - hitPos);
+	float attenuation = 1.0 / (light.GetConstant() + light.GetLinear() * distance + light.GetQuadratic() * (distance * distance));
+	// combine results
+	glm::vec3 ambient = light.GetColor() * material.GetAmbient();
+	glm::vec3 diffuse = light.GetColor() * diff * material.GetDiffuse();
+	glm::vec3 specular = light.GetColor() * spec * material.GetSpecular();
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
+	return (ambient + diffuse + specular);
 }
 
 std::string Convert(float number)

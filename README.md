@@ -1,15 +1,18 @@
 # The Ray Tracer
 Ray Tracing con OpenGL.
 
+![SS](OpenGL/OpenGL-Sandbox/outputs/screenshot.png)
+![RT](OpenGL/OpenGL-Sandbox/outputs/SceneRT.png)
+
 ## Descripción
 Para esta tarea se ocupo como codigo base [OpenGL-Core](https://github.com/TheCherno/OpenGL) agregando las clases creadas en la playlist de YouTube [OpenGl](https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2) que se siguio como base para todo este curso.
 
 ## Objetivos
-1. [ ] Los objetos son visibles en la imagen. Esto implica que puedes generar rayos primarios que intersecan con esferas y puedes generar imágenes PNG como archivo de salida.
-2. [ ] Se generan adecuadamente imágenes con cubos y mallas poligonales.
-3. [ ] Los objetos se ordenan adecuadamente de atrás hacia adelante.
-4. [ ] Hay una función que genera un fondo de la escena sin que oscurezca la vista de ninguno de los objetos en la escena. Este fondo se encuentra en todas las imágenes generadas.
-5. [ ] El modelo de iluminaión de difusión y especular (Phong) funciona correctamente.
+1. [x] Los objetos son visibles en la imagen. Esto implica que puedes generar rayos primarios que intersecan con esferas y puedes generar imágenes PNG como archivo de salida.
+2. [x] Se generan adecuadamente imágenes con cubos y mallas poligonales.
+3. [x] Los objetos se ordenan adecuadamente de atrás hacia adelante.
+4. [x] Hay una función que genera un fondo de la escena sin que oscurezca la vista de ninguno de los objetos en la escena. Este fondo se encuentra en todas las imágenes generadas.
+5. [x] El modelo de iluminaión de difusión y especular (Phong) funciona correctamente.
 6. [ ] Las sombras funcionan correctamente.
 7. [ ] Se proporciona un script que define y dibuja (render) una escena original.
 8. [x] Las esferas y los cubos se pueden transformar con transformaciones afines.

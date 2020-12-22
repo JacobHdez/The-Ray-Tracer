@@ -9,6 +9,7 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/extended_min_max.hpp>
 #include <imgui.h>
 
 #include <stb/stb_image.h>
