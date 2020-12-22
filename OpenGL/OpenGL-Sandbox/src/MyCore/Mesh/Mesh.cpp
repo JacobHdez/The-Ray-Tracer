@@ -23,6 +23,57 @@ Mesh::~Mesh()
 {
 }
 
+void Mesh::loadMesh(const std::string& path)
+{
+	LOG_INFO("Loading mesh - Assimp");
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_OptimizeMeshes);
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		std::string err = "ERROR::ASSIMP::";
+		err += importer.GetErrorString();
+		LOG_ERROR(err);
+		return;
+	}
+	processNode(scene->mRootNode, scene);
+	LOG_INFO("Mesh loaded - Assimp");
+}
+
+void Mesh::processNode(aiNode* node, const aiScene* scene)
+{
+	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		processMesh(mesh, scene);
+	}
+	for (unsigned int i = 0; i < node->mNumChildren; ++i)
+	{
+		processNode(node->mChildren[i], scene);
+	}
+}
+
+void Mesh::processMesh(aiMesh* mesh, const aiScene* scene)
+{
+	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
+	{
+		Vertex vertex;
+		glm::vec3 vector;
+
+		vector.x = mesh->mVertices[i].x;
+		vector.y = mesh->mVertices[i].y;
+		vector.z = mesh->mVertices[i].z;
+		vertex.Position = vector;
+
+		m_Vertices.push_back(vertex);
+	}
+	for (unsigned int i = 0; i < mesh->mNumFaces; ++i)
+	{
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; ++j)
+			m_Indices.push_back(face.mIndices[j]);
+	}
+}
+
 void Mesh::Setup()
 {
 	m_va.Setup();

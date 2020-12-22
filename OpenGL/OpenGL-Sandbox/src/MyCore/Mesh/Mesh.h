@@ -1,11 +1,17 @@
 #pragma once
 
 #include "Vertex.h"
+#include "Material/Material.h"
 #include "Primitive/Primitive.h"
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/VertexBufferLayout.h"
+
+// Assimp
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 class Mesh
 {
@@ -15,11 +21,19 @@ public:
 	Mesh(const Mesh& mesh);
 	~Mesh();
 
+	void loadMesh(const std::string& path);
+	void processNode(aiNode* node, const aiScene* scene);
+	void processMesh(aiMesh* mesh, const aiScene* scene);
+
+	void SetMaterial(const std::shared_ptr<Material>& material) { m_Material = material; }
+
 	void Setup();
 	void Draw(const GLCore::Utils::Shader* shader);
 private:
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
+
+	std::shared_ptr<Material> m_Material;
 
 	// OpenGL - Renderer
 	VertexArray m_va;
