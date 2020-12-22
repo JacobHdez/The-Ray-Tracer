@@ -16,27 +16,29 @@ void RTRender(Scene& scene, unsigned int width, unsigned int height, std::string
 	glm::vec3 lower_left_corner = origin - horizontal / 2.0f - vertical / 2.0f - glm::vec3(0.0f, 0.0f, focal_length);
 
 	// Render
-	float nPixels = (float)(width * height);
-	unsigned int count = 0;
+	float nPixels = (float)(width * height) * 3.0f;
+	int count = 0;
 	std::string buff;
 
 	unsigned char* pixels = new unsigned char[3 * width * height];
-	for (unsigned int i = 0; i < height; ++i)
+	for (int j = height - 1; j >= 0; --j)
 	{
-		for (unsigned int j = 0; j < width; ++j)
+		for (int i = 0; i < width; ++i)
 		{
 			if (count % 1000 == 0)
 			{
 				buff = Convert(count / nPixels * 100.0f) + "%";
 				LOG_INFO(buff.c_str());
 			}
-			count++;
 
-			// Test img
-			pixels[0 + 3 * (j + width * i)] = ((float)i / (float)height) * 255;
-			pixels[1 + 3 * (j + width * i)] = ((float)j / (float)width) * 255;
-			pixels[2 + 3 * (j + width * i)] = ((i < height / 2.0f) && (j < width / 2.0f) ||
-				(i >= height / 2.0f) && (j >= width / 2.0f)) ? 255 : 0;
+			float u = float(i) / (width - 1);
+			float v = float(j) / (height - 1);
+			Ray ray(origin, lower_left_corner + u * horizontal + v * vertical - origin);
+			glm::vec3 pixel_color = ray_color(ray);
+
+			pixels[count++] = (unsigned int)(pixel_color.x * 255);
+			pixels[count++] = (unsigned int)(pixel_color.y * 255);
+			pixels[count++] = (unsigned int)(pixel_color.z * 255);
 		}
 	}
 	std::string imagePath = "outputs/" + imgName + ".png";
@@ -47,11 +49,34 @@ void RTRender(Scene& scene, unsigned int width, unsigned int height, std::string
 	LOG_INFO(buff.c_str());
 }
 
+float hit_sphere(const glm::vec3& center, float radius, Ray& ray) {
+	glm::vec3 oc = ray.GetOrigin() - center;
+	auto a = glm::dot(ray.GetDirection(), ray.GetDirection());
+	auto b = 2.0f * glm::dot(oc, ray.GetDirection());
+	auto c = glm::dot(oc, oc) - radius * radius;
+	auto discriminant = b * b - 4.0f * a * c;
+	if (discriminant < 0)
+	{
+		return -1.0f;
+	}
+	else
+	{
+		return (-b - sqrt(discriminant)) / (2.0f * a);
+	}
+}
+
 glm::vec3 ray_color(Ray& ray)
 {
+	float t = hit_sphere(glm::vec3(0.0f, 0.0f, -1.0f), 0.5f, ray);
+	if (t > 0.0f)
+	{
+		glm::vec3 N = glm::normalize(ray.at(t) - glm::vec3(0.0f, 0.0f, -1.0f));
+		return 0.5f * glm::vec3(N.x + 1.0f, N.y + 1.0f, N.z + 1.0f);
+	}
+
 	glm::vec3 uDir = glm::normalize(ray.GetDirection());
 	float t = 0.5f * (uDir.y + 1.0f);
-	return (1.0f - t) * glm::vec3(1.0f);
+	return (1.0f - t) * glm::vec3(1.0f, 1.0f, 1.0f) + t * glm::vec3(0.5f, 0.7f, 1.0f);
 }
 
 std::string Convert(float number)
@@ -62,6 +87,3 @@ std::string Convert(float number)
 	buff << number;
 	return buff.str();
 }
-/*
-return (1.0-t)*color(1.0, 1.0, 1.0) + t*color(0.5, 0.7, 1.0);
-*/
