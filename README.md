@@ -1,5 +1,5 @@
 # The Ray Tracer
-Ray Tracing con OpenGL.
+Ray Tracing y OpenGL.
 
 ![SS](OpenGL/OpenGL-Sandbox/outputs/screenshot.png)
 ![RT](OpenGL/OpenGL-Sandbox/outputs/SceneRT.png)
