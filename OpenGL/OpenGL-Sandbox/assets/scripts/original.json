@@ -9,17 +9,10 @@
     "light_sources": {
         "white_light": {
             "color": [ 0.99, 0.99, 0.99 ],
-            "position": [ 0.0, 2.0, 2.0 ],
+            "position": [ 0.0, 2.0, 1.0 ],
             "constant": 1.0,
             "linear": 0.09,
             "quadratic": 0.032
-        },
-        "orange_light": {
-            "color": [ 0.98, 0.58, 0.19 ],
-            "position": [ -2.0, 2.0, 1.0 ],
-            "constant": 1.0,
-            "linear": 0.14,
-            "quadratic": 0.07
         }
     },
 
@@ -30,18 +23,6 @@
             "specular": [ 0.5, 0.5, 0.5 ],
             "shininess": 0.0
         },
-        "chrome": {
-            "ambient": [ 0.25, 0.25, 0.25 ],
-            "diffuse": [ 0.4, 0.4, 0.4 ],
-            "specular": [ 0.774597, 0.774597, 0.774597 ],
-            "shininess": 60.0
-        },
-        "pearl": {
-            "ambient": [ 0.25, 0.20725, 0.20725 ],
-            "diffuse": [ 1.0, 0.829, 0.829 ],
-            "specular": [ 0.296648, 0.296648, 0.296648 ],
-            "shininess": 8.8
-        },
         "cris": {
             "ambient": [ 1.0, 1.0, 1.0 ],
             "diffuse": [ 0.0, 1.0, 0.991435 ],
@@ -51,34 +32,18 @@
     },
 
     "objects": {
-        "plane": {
-            "position": [ 0.0, -1.0, -5.0 ],
+        "mountain": {
+            "position": [ 0.0, -2.0, 0.0 ],
             "rotation": [ 0.0, 0.0, 0.0 ],
-            "scale": [ 7.0, 0.0, 7.0 ],
+            "scale": [ 2.0, 1.0, 1.0 ],
             "material": "stone",
-            "primitive": 1,
-            "type": "plane"
+            "primitive": 0,
+            "filepath": "assets/objects/mountain/mountain.obj"
         },
-        "cube:1": {
-            "position": [ -2.0, 0.0, -2.0 ],
-            "rotation": [ 0.0, 0.75, 0.0 ],
-            "scale": [ 1.0, 1.0, 1.0 ],
-            "material": "chrome",
-            "primitive": 1,
-            "type": "cube"
-        },
-        "cube_2": {
-            "position": [ 2.0, 0.0, -2.0 ],
-            "rotation": [ 0.0, -0.1, 0.0 ],
-            "scale": [ 0.5, 1.0, 0.5 ],
-            "material": "pearl",
-            "primitive": 1,
-            "type": "cube"
-        },
-        "cube_3": {
-            "position": [ 0.25, -0.5, -2.0 ],
-            "rotation": [ 0.0, 0.7, 0.0 ],
-            "scale": [ 0.25, 0.5, 1.25 ],
+        "box": {
+            "position": [ -0.2, 0.0, 0.0 ],
+            "rotation": [ 0.7, 0.6, 0.5 ],
+            "scale": [ 0.2, 0.2, 0.2 ],
             "material": "cris",
             "primitive": 1,
             "type": "cube"
